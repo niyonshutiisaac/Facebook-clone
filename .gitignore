@@ -1,0 +1,32 @@
+# dependencies
+node_modules/
+vendor/
+
+# build output
+dist/
+build/
+public/build/
+public/hot
+
+# environment
+.env
+.env.backup
+.env.production
+
+# laravel
+/backend/storage/*.key
+/backend/storage/framework/cache/data/
+/backend/storage/framework/sessions/
+/backend/storage/framework/testing/
+/backend/storage/framework/views/
+/backend/storage/logs/*.log
+/backend/bootstrap/ssr
+
+# misc
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/
+coverage/
+.phpunit.cache

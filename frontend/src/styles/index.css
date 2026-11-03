@@ -1,0 +1,223 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Design tokens.
+ *
+ * Colours are stored as space separated RGB channels so Tailwind's
+ * `<alpha-value>` syntax works (e.g. `bg-surface/80`), while remaining readable
+ * here. Dark mode swaps the variables under `[data-theme="dark"]`.
+ */
+@layer base {
+  :root {
+    --canvas: 240 242 245; /* #F0F2F5 */
+    --surface: 255 255 255; /* #FFFFFF */
+    --elevated: 255 255 255;
+    --subtle: 240 242 245; /* #F0F2F5 — comment/chat bubbles */
+    --divider: 206 208 212; /* #CED0D4 */
+    --overlay: 0 0 0;
+
+    --text-primary: 5 5 5; /* #050505 */
+    --text-secondary: 101 103 107; /* #65676B */
+    --text-tertiary: 138 141 145; /* #8A8D91 */
+    --text-accent: 8 102 255; /* #0866FF */
+
+    --hover: 0 0 0; /* used at 5% opacity */
+    --pressed: 0 0 0; /* used at 10% opacity */
+    --skeleton: 206 208 212;
+
+    --scrollbar-thumb: 176 179 184;
+    color-scheme: light;
+  }
+
+  [data-theme='dark'] {
+    --canvas: 24 25 26; /* #18191A */
+    --surface: 36 37 38; /* #242526 */
+    --elevated: 58 59 60; /* #3A3B3C */
+    --subtle: 58 59 60;
+    --divider: 62 64 66; /* #3E4042 */
+    --overlay: 255 255 255;
+
+    --text-primary: 228 230 235; /* #E4E6EB */
+    --text-secondary: 176 179 184; /* #B0B3B8 */
+    --text-tertiary: 145 148 153; /* #919499 */
+    --text-accent: 45 136 255; /* #2D88FF */
+
+    --hover: 255 255 255; /* used at 10% opacity */
+    --pressed: 255 255 255; /* used at 15% opacity */
+    --skeleton: 58 59 60;
+
+    --scrollbar-thumb: 91 94 98;
+    color-scheme: dark;
+  }
+
+  * {
+    @apply border-divider;
+  }
+
+  html {
+    -webkit-tap-highlight-color: transparent;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-canvas text-primary font-sans text-md antialiased;
+    margin: 0;
+    overscroll-behavior-y: none;
+  }
+
+  /* Facebook never shows a focus ring for mouse users, but keyboard users get
+     a clear one — this is the only accessible way to have both. */
+  :focus-visible {
+    outline: 2px solid #1877f2;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    @apply bg-facebook/25;
+  }
+
+  /* Scrollbars ------------------------------------------------------- */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--scrollbar-thumb)) transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: rgb(var(--scrollbar-thumb));
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Reduced motion ---------------------------------------------------- */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* -------------------------------------------------------------- buttons */
+  .btn {
+    @apply inline-flex select-none items-center justify-center gap-2 rounded-control
+      text-base font-semibold transition-colors duration-100 ease-fb
+      disabled:pointer-events-none disabled:opacity-60;
+  }
+
+  .btn-primary {
+    @apply btn bg-facebook-action text-white hover:bg-facebook-action-hover active:scale-[0.98];
+  }
+
+  .btn-secondary {
+    @apply btn bg-elevated text-primary hover:bg-hover/[0.08] active:scale-[0.98];
+  }
+
+  .btn-ghost {
+    @apply btn text-secondary hover:bg-hover/[0.05] active:bg-hover/[0.1];
+  }
+
+  .btn-sm {
+    @apply h-8 px-3 text-sm;
+  }
+
+  .btn-md {
+    @apply h-9 px-4;
+  }
+
+  .btn-lg {
+    @apply h-11 px-6 text-lg;
+  }
+
+  /* ----------------------------------------------------------- containers */
+  .card {
+    @apply rounded-card bg-surface shadow-card;
+  }
+
+  [data-theme='dark'] .card,
+  [data-theme='dark'] .shadow-card {
+    box-shadow: theme('boxShadow.card-dark');
+  }
+
+  .divider-x {
+    @apply my-2 h-px bg-divider;
+  }
+
+  /* Facebook's floating header/search bars are translucent and blur the feed
+     behind them. */
+  .glass {
+    @apply bg-surface/85 backdrop-blur-md;
+  }
+
+  /* ------------------------------------------------------------- skeleton */
+  .skeleton {
+    @apply relative overflow-hidden rounded bg-skeleton/60;
+  }
+
+  .skeleton::after {
+    @apply absolute inset-0 -translate-x-full animate-shimmer;
+    content: '';
+    background-image: linear-gradient(
+      90deg,
+      transparent,
+      rgb(var(--surface) / 0.35),
+      transparent
+    );
+  }
+
+  /* --------------------------------------------------------------- inputs */
+  .input {
+    @apply w-full rounded-control border border-divider bg-surface px-3 py-2 text-md
+      text-primary placeholder:text-tertiary
+      focus:border-facebook focus:outline-none focus:ring-1 focus:ring-facebook;
+  }
+
+  .circle-button {
+    @apply grid h-10 w-10 shrink-0 place-items-center rounded-full bg-elevated
+      text-primary transition-colors duration-100 hover:bg-hover/[0.08]
+      active:scale-95;
+  }
+
+  [data-theme='dark'] .circle-button {
+    @apply bg-elevated hover:bg-hover/[0.12];
+  }
+
+  /* ---------------------------------------------------------- typography */
+  .link {
+    @apply text-accent hover:underline;
+  }
+
+  /* Long post bodies get Facebook's "See more" treatment. */
+  .clamp-4 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
+  }
+}
