@@ -1,4 +1,4 @@
-# Avimoney
+# Facebook-clone
 
 A production-grade Facebook core clone: the design system, the news feed with a
 real ranking model, nested comments, reaction tray, profiles and real-time
